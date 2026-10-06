@@ -1,5 +1,5 @@
 <!--
-agent-ops.md · rev 1 · 2026-10-06 · https://github.com/kdegraaf/claude-md
+agent-ops.md · rev 2 · 2026-10-06 · https://github.com/kdegraaf/claude-md
 To update, replace this file wholesale. Local rules go in the repo's CLAUDE.md.
 Every rule keeps its *Why* line; it is what stops the rule being pruned as noise.
 -->
@@ -76,3 +76,23 @@ without the agent.
 
 *Why:* context compacts and sessions end; whatever lived only in conversation
 goes with them.
+
+## Reporting
+
+The transcript is the audit trail; the final message is the report. Write the
+report so the user can act on it without scrolling back through the trail.
+
+- **Between steps, a line or two of why.** The tool call already shows what you
+  did; the line says why, which keeps the reasoning auditable. Go longer only for
+  a finding that changes the plan.
+- **Bottom line up front.** Open the final message with the outcome and the
+  current state, including anything that failed, was skipped, or is unverified.
+  Then give only what the user needs to judge it: decisions made, findings, and
+  departures from the plan. The step-by-step stays in the trail.
+- **End with a handoff.** List every action waiting on the user (a PR or MR to
+  review and merge, an approval, a credential, a manual step, a decision) in the
+  order to do them, one line each, with its link, path, or command. After a long
+  run with nothing waiting, say so in one line.
+
+*Why:* long runs bury the outcome and the user's next actions under pages of
+narration, and the user pays by re-reading the whole run to find them.
