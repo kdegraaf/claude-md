@@ -24,6 +24,7 @@ scope, and each repo carries only what's specific to it.
    `install.sh` concatenates both files into `~/.claude/CLAUDE.md`, or into
    `$CLAUDE_CONFIG_DIR/CLAUDE.md` when that variable is set. It writes a real file
    rather than a symlink, because Cowork skips a symlinked `~/.claude/CLAUDE.md`.
+   It shows what it would install and asks first; without a terminal, pass `--yes`.
 3. Start a fresh session and check that `/context` lists `~/.claude/CLAUDE.md`.
 
 ## Change the rules
@@ -32,8 +33,14 @@ scope, and each repo carries only what's specific to it.
    new rule goes in `agent-ops.md` unless it's pure taste. Give it a one-line
    *Why*, and leave out hostnames, IPs, employer names, and people's names: this
    repo is public.
-2. Bump the rev in `agent-ops.md`'s header comment, then commit and push.
-3. On each machine, run `git pull && ./install.sh`.
+2. If you changed `agent-ops.md`, bump the rev in its header comment. Commit and push.
+3. On each machine:
+   1. `git pull`. If its file list includes `install.sh`, read that change before
+      running it: `git diff HEAD@{1} -- install.sh`. A changed installer could skip
+      the next step's question.
+   2. `./install.sh`. It shows what would change in your installed rules and asks
+      before installing. Read it: these rules steer Claude Code on every machine, so a
+      bad push reaches all of them.
 
 If the install refuses, something has written to the installed copy since the last
 install: asking Claude to "add this to CLAUDE.md", for example, or editing through

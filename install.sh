@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Build ~/.claude/CLAUDE.md from personal.md + agent-ops.md.
-# Refuses to overwrite an installed copy that changed since the last install
-# (e.g. via /memory or "add this to CLAUDE.md") and shows the diff instead.
-#   ./install.sh          install, or refuse if the installed copy was edited
-#   ./install.sh --force  back up the installed copy, then overwrite it
+# These rules steer Claude Code on every machine, so it shows what would change and asks
+# before installing. It refuses to overwrite an installed copy that changed since the last
+# install (e.g. via /memory or "add this to CLAUDE.md") and shows the diff instead.
+#   ./install.sh          show the change, ask, then install
+#   ./install.sh --yes    install without asking; required when there's no terminal
+#   ./install.sh --force  back up an edited installed copy, then overwrite it
 set -euo pipefail
 
 repo="$(cd "$(dirname "$0")" && pwd)"
@@ -12,11 +14,14 @@ dest="$dest_dir/CLAUDE.md"
 stamp="$dest_dir/.CLAUDE.md.installed-sha256"
 
 force=false
-case "${1:-}" in
-  "") ;;
-  --force) force=true ;;
-  *) echo "usage: $0 [--force]" >&2; exit 2 ;;
-esac
+yes=false
+for arg in "$@"; do
+  case "$arg" in
+    --force) force=true ;;
+    --yes) yes=true ;;
+    *) echo "usage: $0 [--yes] [--force]" >&2; exit 2 ;;
+  esac
+done
 
 sha() {
   if command -v sha256sum >/dev/null; then sha256sum; else shasum -a 256; fi | cut -d' ' -f1
@@ -47,7 +52,10 @@ trap 'rm -f "$new"' EXIT
 build > "$new"
 new_sha="$(sha < "$new")"
 
+current=/dev/null
+edited=false
 if [ -f "$dest" ]; then
+  current="$dest"
   cur_sha="$(sha < "$dest")"
   if [ "$cur_sha" = "$new_sha" ]; then
     echo "up to date: $dest"
@@ -62,10 +70,30 @@ if [ -f "$dest" ]; then
       diff -u "$dest" "$new" >&2 || true
       exit 1
     fi
-    backup="$dest.bak-$(date +%Y%m%d-%H%M%S)"
-    cp "$dest" "$backup"
-    echo "backed up edited copy to $backup"
+    edited=true
   fi
+fi
+
+if ! $yes; then
+  echo "Installing would make this change to $dest:" >&2
+  echo >&2
+  diff -u "$current" "$new" >&2 || true
+  echo >&2
+  if [ ! -t 0 ]; then
+    echo "not installed: no terminal to ask on. Read the change above, then rerun with --yes." >&2
+    exit 1
+  fi
+  read -r -p "Install it? [y/N] " answer
+  case "$answer" in
+    y|Y|yes) ;;
+    *) echo "not installed" >&2; exit 1 ;;
+  esac
+fi
+
+if $edited; then
+  backup="$dest.bak-$(date +%Y%m%d-%H%M%S)"
+  cp "$dest" "$backup"
+  echo "backed up edited copy to $backup"
 fi
 
 mkdir -p "$dest_dir"
