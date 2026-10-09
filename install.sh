@@ -28,7 +28,10 @@ sha() {
 }
 
 rev="$(sed -n 's/.* rev \([0-9][0-9]*\) .*/\1/p' "$repo/agent-ops.md" | head -n1)"
-commit="$(git -C "$repo" rev-parse --short HEAD 2>/dev/null || echo unknown)"
+# The last commit that changed the rules, so commits to other files don't alter the output
+# (and so don't prompt for a change that means nothing).
+commit="$(git -C "$repo" log -1 --format=%h -- personal.md agent-ops.md 2>/dev/null || true)"
+commit="${commit:-unknown}"
 if [ -n "$(git -C "$repo" status --porcelain -- personal.md agent-ops.md 2>/dev/null)" ]; then
   commit="$commit-dirty"
 fi
