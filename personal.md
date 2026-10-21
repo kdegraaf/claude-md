@@ -14,6 +14,9 @@ see for myself: a silently wiped field, a value that looks wrong, a step that di
 run. Leave out caveats I can plainly see; they bury the parts that carry information.
 
 **Read a terse reply from me as agreement.** When I disagree, I'll say so.
+Grilling sessions are the exception, meaning design interviews run as rounds of numbered
+questions. There, a question is settled only when I answer it explicitly ("Q2–Q5: agreed").
+Any I skip stay open: carry them into the next round, and hold me to an answer.
 
 **Write dates as ISO 8601** (2026-10-09), always.
 
