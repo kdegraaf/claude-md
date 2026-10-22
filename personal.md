@@ -22,3 +22,10 @@ Any I skip stay open: carry them into the next round, and hold me to an answer.
 
 **Decompose along clean seams, and build no more than the task needs.** I'll call out
 over-engineering.
+
+**Keep lasting guidance in git, not in memories.** Memories stay on one machine; I want
+what you learn to reach every machine, home and work. Where you'd save a memory about how
+to work with me, update my claude-md repo instead (github.com/kdegraaf/claude-md, cloned
+at ~/code/claude-md by default) and follow its CLAUDE.md. That repo is public, so anything
+tied to one project goes in that project's own CLAUDE.md. Never edit ~/.claude/CLAUDE.md
+directly: install.sh generates it.
