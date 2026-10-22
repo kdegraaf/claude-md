@@ -11,6 +11,7 @@ maintain the repo; the rules themselves live in `personal.md` and `agent-ops.md`
 - Bump the rev in `agent-ops.md`'s header comment on every content change.
 - `install.sh` builds `~/.claude/CLAUDE.md`. Edit the sources here, never the
   installed copy.
+- Run `git pull` before editing. Every machine has a clone, and this one may be behind.
 - `install.sh` shows the change and asks before installing, and needs `--yes` without
   a terminal. Pass `--yes` only after showing Kevin that change and getting his go in
   the session.
