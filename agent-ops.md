@@ -1,5 +1,5 @@
 <!--
-agent-ops.md · rev 2 · 2026-10-06 · https://github.com/kdegraaf/claude-md
+agent-ops.md · rev 3 · 2026-10-22 · https://github.com/kdegraaf/claude-md
 To update, replace this file wholesale. Local rules go in the repo's CLAUDE.md.
 Every rule keeps its *Why* line; it is what stops the rule being pruned as noise.
 -->
@@ -91,8 +91,11 @@ report so the user can act on it without scrolling back through the trail.
   departures from the plan. The step-by-step stays in the trail.
 - **End with a handoff.** List every action waiting on the user (a PR or MR to
   review and merge, an approval, a credential, a manual step, a decision) in the
-  order to do them, one line each, with its link, path, or command. After a long
-  run with nothing waiting, say so in one line.
+  order to do them, one line each, with its link, path, or command. Number them so
+  that each number is one action needing the user's go, including any gate the
+  later ones depend on. After a long run with nothing waiting, say so in one line.
 
 *Why:* long runs bury the outcome and the user's next actions under pages of
-narration, and the user pays by re-reading the whole run to find them.
+narration, and the user pays by re-reading the whole run to find them. A go given
+by number covers only what that number names, so an approval left outside the list
+gets granted by implication.
