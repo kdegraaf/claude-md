@@ -1,5 +1,5 @@
 <!--
-agent-ops.md · rev 4 · 2026-10-26 · https://github.com/kdegraaf/claude-md
+agent-ops.md · rev 5 · 2026-10-31 · https://github.com/kdegraaf/claude-md
 To update, replace this file wholesale. Local rules go in the repo's CLAUDE.md.
 Every rule keeps its *Why* line; it is what stops the rule being pruned as noise.
 -->
@@ -70,12 +70,33 @@ watches every session scroll and fields questions from each.
 
 ## Durable context
 
-Write decisions, designs, and findings to disk as you reach them. A long task
-leaves a Markdown trail that survives compaction and that the user can read
-without the agent.
+Write decisions, designs, and findings to disk as you reach them, in the tracked
+file where they belong. Scratchpads, memories, and the conversation aren't durable:
+at each stopping point (a topic or round of questions done, a decision made, before
+a long wait), move what matters out of them. A long task leaves a Markdown trail
+that survives compaction and that the user can read without the agent.
 
-*Why:* context compacts and sessions end; whatever lived only in conversation
-goes with them.
+*Why:* context compacts and sessions end; whatever lived only in conversation, a
+scratchpad, or one machine's memory goes with them.
+
+## Landing work
+
+Write to files often; commit to the default branch rarely.
+
+- **One topic, one commit.** Collect a topic's changes in the working tree and land
+  them on the default branch together, once the topic is finished. Fold late
+  corrections and details into that commit instead of following it with small ones.
+  Unrelated topics still get their own commits.
+- **Keep unfinished work off the default branch.** If a draft has to outlast the
+  session, or the working tree might not, commit it to a work-in-progress branch.
+- **Ask what's left before landing.** Work in rounds: check what you can yourself,
+  put it in the draft, ask what only the user knows, repeat. When the draft looks
+  done, ask outright whether there's anything more to cover, and hold the commit for
+  the answer. It's a real question, not a closing courtesy. Skip it only when the
+  user has told you to run without stopping.
+
+*Why:* a string of small commits buries each change under its own corrections, and
+an agent that decides alone when a topic is done leaves out what only the user knows.
 
 ## Reporting
 
